@@ -24,7 +24,7 @@ public class SecretStorage
   private ObjectPath Session { get; set; }
   private string AppFolder { get; set; }
 
-  public async Task Init(string appFolder)
+  public async Task Connect(string appFolder)
   {
     AppFolder = appFolder;
     Connection = new Connection(Address.Session);
@@ -120,7 +120,7 @@ class Program
   static async Task Main()
   {
     var secretStorage = new SecretStorage();
-    await secretStorage.Init("MySuperApp");
+    await secretStorage.Connect("MySuperApp");
     await secretStorage.CreateItem("key1", Encoding.UTF8.GetBytes("value1"));
     await secretStorage.ListItems();
   }
