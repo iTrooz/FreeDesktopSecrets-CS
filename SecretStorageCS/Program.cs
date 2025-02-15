@@ -7,14 +7,14 @@ using Tmds.DBus;
 
 public struct SecretStruct
 {
-  public ObjectPath ObjectPath { get; set; }
-  public byte[] ByteArray1 { get; set; }
-  public byte[] ByteArray2 { get; set; }
-  public string String { get; set; }
+  public ObjectPath Session { get; set; }
+  public byte[] Parameters { get; set; }
+  public byte[] Value { get; set; }
+  public string ContentType { get; set; }
 
   public static implicit operator (ObjectPath, byte[], byte[], string)(SecretStruct secretStruct)
   {
-    return (secretStruct.ObjectPath, secretStruct.ByteArray1, secretStruct.ByteArray2, secretStruct.String);
+    return (secretStruct.Session, secretStruct.Parameters, secretStruct.Value, secretStruct.ContentType);
   }
 }
 
@@ -70,10 +70,10 @@ public class SecretStorage
   {
     var secret = new SecretStruct
     {
-      ObjectPath = Session,
-      ByteArray1 = Encoding.UTF8.GetBytes(""),
-      ByteArray2 = value,
-      String = "text/plain"
+      Session = Session,
+      Parameters = Encoding.UTF8.GetBytes(""),
+      Value = value,
+      ContentType = "text/plain"
     };
 
     var (createdItem, prompt) = await this.CollectionProxy.CreateItemAsync(
