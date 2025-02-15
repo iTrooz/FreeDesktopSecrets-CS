@@ -97,22 +97,6 @@ public class SecretStorage
       Console.WriteLine();
     }
   }
-  
-  // Doesn't work well, only returns some items
-  public async Task ListItemsLegacy()
-  {
-    var res = await this.CollectionProxy.SearchItemsAsync(new Dictionary<string, string>());
-    Console.WriteLine($"Listing {res.Length} items: {string.Join(", ", res)}");
-    foreach (var item in res)
-    {
-      // Get item
-      var itemProxy = this.Connection.CreateProxy<IItem>("org.freedesktop.secrets", item);
-      var props = await itemProxy.GetAllAsync();
-      Console.WriteLine("----------");
-      Console.WriteLine($"Props: {props.Created}, {props.Modified}, {props.Label}, {props.Type}");
-      Console.WriteLine($"Attributes: {string.Join(", ", props.Attributes)}");
-    }
-  }
 }
 
 class Program
