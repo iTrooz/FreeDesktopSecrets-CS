@@ -79,11 +79,15 @@ public class SecretStorage
 
   private Dictionary<string, string> getAttributes(string key)
   {
-    return new Dictionary<string, string>
+    var d = new Dictionary<string, string>
     {
-      { "appFolder", AppFolder },
-      { "key", key }
+      { "appFolder", AppFolder }
     };
+    if (key != null)
+    {
+      d["key"] = key;
+    }
+    return d;
   }
 
   public async Task CreateItem(string key, byte[] value, bool replace)
@@ -134,17 +138,17 @@ public class SecretStorage
     return secret.Value;
   }
 
-  public async Task ListItems()
+  public async Task<List<string>> ListItemKeys()
   {
-    var props = await CollectionProxy.GetAllAsync();
-    foreach (var item in props.Items)
+    List<string> keys = new List<string>();
+    var items = await CollectionProxy.SearchItemsAsync(getAttributes(null));
+    foreach (var item in items)
     {
       var itemProxy = Connection.CreateProxy<IItem>("org.freedesktop.secrets", item);
-      var itemProps = await itemProxy.GetAllAsync();
-      Console.WriteLine($"Item: {item}, Type: {itemProps.Type}, Label: {itemProps.Label}");
-      Console.WriteLine($"Attributes ({itemProps.Attributes.Count}): {string.Join(", ", itemProps.Attributes)}");
-      Console.WriteLine();
+      var props = await itemProxy.GetAllAsync();
+      keys.Add(props.Attributes["key"]);
     }
+    return keys;
   }
 }
 
@@ -154,7 +158,13 @@ class Program
   {
     var secretStorage = new SecretStorage();
     await secretStorage.Connect("MySuperApp");
+
     await secretStorage.CreateItem("key1", Encoding.UTF8.GetBytes("value1"), true);
-    Console.WriteLine("Secret value: " + Encoding.UTF8.GetString(await secretStorage.GetItem("key1")));
+    await secretStorage.CreateItem("key2", Encoding.UTF8.GetBytes("value2"), true);
+
+    Console.WriteLine("Secret value of key1: " + Encoding.UTF8.GetString(await secretStorage.GetItem("key1")));
+
+    var itemKeys = await secretStorage.ListItemKeys();
+    Console.WriteLine($"List of items ({itemKeys.Count}): {string.Join(", ", itemKeys)}");
   }
 }
