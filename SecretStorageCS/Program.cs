@@ -18,11 +18,14 @@ public struct SecretStruct
 public class SecretStorage
 {
   public const string DEFAULT_COLLECTION = "/org/freedesktop/secrets/aliases/default";
+
+  #pragma warning disable CS8618
   private Connection Connection { get; set; }
   private IService ServiceProxy { get; set; }
   private ICollection CollectionProxy { get; set; }
   private ObjectPath Session { get; set; }
   private string AppFolder { get; set; }
+  #pragma warning restore CS8618
 
   public async Task Connect(string appFolder)
   {
