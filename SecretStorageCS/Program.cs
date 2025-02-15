@@ -1,4 +1,4 @@
-﻿using SecretStorageCS;
+using SecretStorageCS;
 using System.Text;
 using Tmds.DBus;
 
@@ -66,7 +66,7 @@ public class SecretStorage
     Console.WriteLine($"Unlocked [{string.Join(", ", unlocked)}] ({unlocked.Length}). Prompt: {unlockPrompt}");
   }
 
-  public async Task CreateItem(string key, byte[] value)
+  public async Task CreateItem(string key, byte[] value, bool replace = false)
   {
     var secret = new SecretStruct
     {
@@ -75,6 +75,11 @@ public class SecretStorage
       Value = value,
       ContentType = "text/plain"
     };
+
+    if (!replace) {
+      // Check if already existing
+      throw new NotImplementedException();      
+    }
 
     var (createdItem, prompt) = await this.CollectionProxy.CreateItemAsync(
       new Dictionary<string, object>
