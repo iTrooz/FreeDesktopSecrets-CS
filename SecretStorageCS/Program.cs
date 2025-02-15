@@ -1,4 +1,5 @@
-using SecretStorageCS;
+﻿using SecretStorageCS;
+using System.ComponentModel;
 using System.Text;
 using Tmds.DBus;
 
@@ -7,10 +8,19 @@ public class SecretStorage
 
   struct SecretStruct
   {
+
     public ObjectPath Session { get; set; }
     public byte[] Parameters { get; set; }
     public byte[] Value { get; set; }
     public string ContentType { get; set; }
+
+    public SecretStruct((ObjectPath, byte[], byte[], string) tuple)
+    {
+      Session = tuple.Item1;
+      Parameters = tuple.Item2;
+      Value = tuple.Item3;
+      ContentType = tuple.Item4;
+    }
 
     public static implicit operator (ObjectPath, byte[], byte[], string)(SecretStruct secretStruct)
     {
@@ -111,6 +121,19 @@ public class SecretStorage
     Console.WriteLine($"Secret created (createdItem: {createdItem}, prompt: {prompt})");
   }
 
+  public async Task<byte[]> GetItem(string key)
+  {
+    var items = await CollectionProxy.SearchItemsAsync(getAttributes(key));
+    if (items.Length == 0)
+    {
+      throw new Exception($"Item with key '{key}' in folder '{AppFolder}' not found.");
+    }
+
+    var itemProxy = Connection.CreateProxy<IItem>("org.freedesktop.secrets", items[0]);
+    SecretStruct secret = new SecretStruct(await itemProxy.GetSecretAsync(Session));
+    return secret.Value;
+  }
+
   public async Task ListItems()
   {
     var props = await CollectionProxy.GetAllAsync();
@@ -131,7 +154,7 @@ class Program
   {
     var secretStorage = new SecretStorage();
     await secretStorage.Connect("MySuperApp");
-    await secretStorage.CreateItem("key1", Encoding.UTF8.GetBytes("value1"));
-    await secretStorage.ListItems();
+    await secretStorage.CreateItem("key1", Encoding.UTF8.GetBytes("value1"), true);
+    Console.WriteLine("Secret value: " + Encoding.UTF8.GetString(await secretStorage.GetItem("key1")));
   }
 }
