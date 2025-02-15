@@ -1,6 +1,6 @@
 using Tmds.DBus;
 
-namespace CSharpTest;
+namespace SecretStorageCS;
 
 
 [DBusInterface("org.freedesktop.Secret.Service")]
