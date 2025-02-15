@@ -1,4 +1,4 @@
-using SecretStorageCS;
+﻿using SecretStorageCS;
 using System.Text;
 using Tmds.DBus;
 
@@ -86,9 +86,17 @@ public class SecretStorage
       {
         ["application"] = "MyApp/my-app",
         ["service"] = "MyApp",
-        ["org.freedesktop.Secret.Item.Label"] = AppFolder + "/" + key
+        ["org.freedesktop.Secret.Item.Label"] = AppFolder + "/" + key,
+        ["org.freedesktop.Secret.Item.Attributes"] = new Dictionary<string, string>
+        {
+          { "appFolder", AppFolder },
+          { "key", key },
+        }
       },
-      secret, false
+      secret,
+      // Note: The 'replace' Freedesktop Secrets API parameter only works on *attributes*, not all *properties*
+      // It will replace if it finds secrets with the same *attributes*
+      true
     );
     Console.WriteLine($"Secret created (createdItem: {createdItem}, prompt: {prompt})");
   }
