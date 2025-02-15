@@ -18,11 +18,11 @@ public struct SecretStruct
 public class SecretStorage
 {
   public const string DEFAULT_COLLECTION = "/org/freedesktop/secrets/aliases/default";
-  public Connection Connection { get; set; }
-  public IService ServiceProxy { get; set; }
-  public ICollection CollectionProxy { get; set; }
-  public ObjectPath Session { get; set; }
-  public string AppFolder { get; set; }
+  private Connection Connection { get; set; }
+  private IService ServiceProxy { get; set; }
+  private ICollection CollectionProxy { get; set; }
+  private ObjectPath Session { get; set; }
+  private string AppFolder { get; set; }
 
   public async Task Init(string appFolder)
   {
