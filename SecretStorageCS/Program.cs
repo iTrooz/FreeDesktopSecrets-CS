@@ -66,6 +66,15 @@ public class SecretStorage
     Console.WriteLine($"Unlocked [{string.Join(", ", unlocked)}] ({unlocked.Length}). Prompt: {unlockPrompt}");
   }
 
+  private Dictionary<string, string> getAttributes(string key)
+  {
+    return new Dictionary<string, string>
+    {
+      { "appFolder", AppFolder },
+      { "key", key }
+    };
+  }
+
   public async Task CreateItem(string key, byte[] value, bool replace = false)
   {
     var secret = new SecretStruct
@@ -78,7 +87,11 @@ public class SecretStorage
 
     if (!replace) {
       // Check if already existing
-      throw new NotImplementedException();      
+      var items = await this.CollectionProxy.SearchItemsAsync(getAttributes(key));
+      if (items.Length > 0)
+      {
+        throw new Exception($"Item with key '{key}' in folder '{AppFolder}' already exists. set `replace` to true to replace it.");
+      }
     }
 
     var (createdItem, prompt) = await this.CollectionProxy.CreateItemAsync(
@@ -87,11 +100,7 @@ public class SecretStorage
         ["application"] = "MyApp/my-app",
         ["service"] = "MyApp",
         ["org.freedesktop.Secret.Item.Label"] = AppFolder + "/" + key,
-        ["org.freedesktop.Secret.Item.Attributes"] = new Dictionary<string, string>
-        {
-          { "appFolder", AppFolder },
-          { "key", key },
-        }
+        ["org.freedesktop.Secret.Item.Attributes"] = getAttributes(key),
       },
       secret,
       // Note: The 'replace' Freedesktop Secrets API parameter only works on *attributes*, not all *properties*
