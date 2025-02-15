@@ -25,16 +25,18 @@ public class SecretStorage
   public IService ServiceProxy { get; set; }
   public ICollection CollectionProxy { get; set; }
   public ObjectPath Session { get; set; }
+  public string AppFolder { get; set; }
 
-  public async Task Init(string collection = DEFAULT_COLLECTION)
+  public async Task Init(string appFolder)
   {
+    AppFolder = appFolder;
     Connection = new Connection(Address.Session);
     await Connection.ConnectAsync();
     Console.WriteLine("Connected !");
 
     // Create proxies to call methods
     ServiceProxy = Connection.CreateProxy<IService>("org.freedesktop.secrets", "/org/freedesktop/secrets");
-    CollectionProxy = Connection.CreateProxy<ICollection>("org.freedesktop.secrets", collection);
+    CollectionProxy = Connection.CreateProxy<ICollection>("org.freedesktop.secrets", DEFAULT_COLLECTION);
 
     await CreateSession();
     await UnlockSession();
@@ -64,13 +66,13 @@ public class SecretStorage
     Console.WriteLine($"Unlocked [{string.Join(", ", unlocked)}] ({unlocked.Length}). Prompt: {unlockPrompt}");
   }
 
-  public async Task CreateItem()
+  public async Task CreateItem(string key, byte[] value)
   {
     var secret = new SecretStruct
     {
-      ObjectPath = this.Session,
+      ObjectPath = Session,
       ByteArray1 = Encoding.UTF8.GetBytes(""),
-      ByteArray2 = Encoding.UTF8.GetBytes("HELLO-THIS-IS-SECRET-2"),
+      ByteArray2 = value,
       String = "text/plain"
     };
 
@@ -79,7 +81,7 @@ public class SecretStorage
       {
         ["application"] = "MyApp/my-app",
         ["service"] = "MyApp",
-        ["org.freedesktop.Secret.Item.Label"] = "My secret name"
+        ["org.freedesktop.Secret.Item.Label"] = AppFolder + "/" + key
       },
       secret, false
     );
@@ -121,8 +123,8 @@ class Program
   static async Task Main()
   {
     var secretStorage = new SecretStorage();
-    await secretStorage.Init();
-    await secretStorage.CreateItem();
+    await secretStorage.Init("MySuperApp");
+    await secretStorage.CreateItem("key1", Encoding.UTF8.GetBytes("value1"));
     await secretStorage.ListItems();
   }
 }
