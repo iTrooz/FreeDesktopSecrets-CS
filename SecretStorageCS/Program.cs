@@ -51,7 +51,7 @@ public class SecretStorage
 
   private async Task UnlockSession()
   {
-    var (unlocked, unlockPrompt) = await ServiceProxy.UnlockAsync([DEFAULT_COLLECTION]);
+    var (unlocked, unlockPrompt) = await ServiceProxy.UnlockAsync(new ObjectPath[] { DEFAULT_COLLECTION });
     if (unlockPrompt == "/")
     {
       Console.WriteLine("No need to prompt for unlocking");
