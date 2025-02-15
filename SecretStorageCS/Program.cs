@@ -82,7 +82,7 @@ public class SecretStorage
       Session = Session,
       Parameters = Encoding.UTF8.GetBytes(""),
       Value = value,
-      ContentType = "text/plain"
+      ContentType = "application/octet-stream"
     };
 
     if (!replace) {
