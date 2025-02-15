@@ -18,7 +18,7 @@ public class SecretStorage
     }
   }
 
-  public const string DEFAULT_COLLECTION = "/org/freedesktop/secrets/aliases/default";
+  private const string DEFAULT_COLLECTION = "/org/freedesktop/secrets/aliases/default";
 
   #pragma warning disable CS8618
   private Connection Connection { get; set; }
