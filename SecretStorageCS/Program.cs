@@ -1,4 +1,4 @@
-﻿using SecretStorageCS;
+using SecretStorageCS;
 using System.Text;
 using Tmds.DBus;
 
@@ -76,7 +76,7 @@ public class SecretStorage
     };
   }
 
-  public async Task CreateItem(string key, byte[] value, bool replace = false)
+  public async Task CreateItem(string key, byte[] value, bool replace)
   {
     var secret = new SecretStruct
     {
