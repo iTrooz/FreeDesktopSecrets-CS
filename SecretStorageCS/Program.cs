@@ -2,21 +2,22 @@
 using System.Text;
 using Tmds.DBus;
 
-public struct SecretStruct
-{
-  public ObjectPath Session { get; set; }
-  public byte[] Parameters { get; set; }
-  public byte[] Value { get; set; }
-  public string ContentType { get; set; }
-
-  public static implicit operator (ObjectPath, byte[], byte[], string)(SecretStruct secretStruct)
-  {
-    return (secretStruct.Session, secretStruct.Parameters, secretStruct.Value, secretStruct.ContentType);
-  }
-}
-
 public class SecretStorage
 {
+
+  struct SecretStruct
+  {
+    public ObjectPath Session { get; set; }
+    public byte[] Parameters { get; set; }
+    public byte[] Value { get; set; }
+    public string ContentType { get; set; }
+
+    public static implicit operator (ObjectPath, byte[], byte[], string)(SecretStruct secretStruct)
+    {
+      return (secretStruct.Session, secretStruct.Parameters, secretStruct.Value, secretStruct.ContentType);
+    }
+  }
+
   public const string DEFAULT_COLLECTION = "/org/freedesktop/secrets/aliases/default";
 
   #pragma warning disable CS8618
