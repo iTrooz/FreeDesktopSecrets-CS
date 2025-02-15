@@ -87,14 +87,14 @@ public class SecretStorage
 
     if (!replace) {
       // Check if already existing
-      var items = await this.CollectionProxy.SearchItemsAsync(getAttributes(key));
+      var items = await CollectionProxy.SearchItemsAsync(getAttributes(key));
       if (items.Length > 0)
       {
         throw new Exception($"Item with key '{key}' in folder '{AppFolder}' already exists. set `replace` to true to replace it.");
       }
     }
 
-    var (createdItem, prompt) = await this.CollectionProxy.CreateItemAsync(
+    var (createdItem, prompt) = await CollectionProxy.CreateItemAsync(
       new Dictionary<string, object>
       {
         ["application"] = "MyApp/my-app",
@@ -112,10 +112,10 @@ public class SecretStorage
 
   public async Task ListItems()
   {
-    var props = await this.CollectionProxy.GetAllAsync();
+    var props = await CollectionProxy.GetAllAsync();
     foreach (var item in props.Items)
     {
-      var itemProxy = this.Connection.CreateProxy<IItem>("org.freedesktop.secrets", item);
+      var itemProxy = Connection.CreateProxy<IItem>("org.freedesktop.secrets", item);
       var itemProps = await itemProxy.GetAllAsync();
       Console.WriteLine($"Item: {item}, Type: {itemProps.Type}, Label: {itemProps.Label}");
       Console.WriteLine($"Attributes ({itemProps.Attributes.Count}): {string.Join(", ", itemProps.Attributes)}");
