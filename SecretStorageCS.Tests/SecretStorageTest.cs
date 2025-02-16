@@ -62,7 +62,7 @@ public class UnitTest1Test
         Assert.Equal(secretValue, await storage.GetItem("TestItem"));
 
         await storage.DeleteItem("TestItem");
-        await Assert.ThrowsAsync<KeyNotFoundException>(async () => await storage.GetItem("TestItem"));
+        Assert.Null(await storage.GetItem("TestItem"));
     }
 
     [Fact]

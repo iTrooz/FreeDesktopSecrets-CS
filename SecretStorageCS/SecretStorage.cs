@@ -1,4 +1,5 @@
-﻿using SecretStorageCS;
+﻿#nullable enable
+using SecretStorageCS;
 using System.Text;
 using Tmds.DBus;
 
@@ -158,12 +159,11 @@ public class SecretStorage
     /// <summary>
     /// Retrieve the secret value associated to a given key
     /// </summary>
-    public async Task<byte[]> GetItem(string key)
-    {
+    public async Task<byte[]?> GetItem(string key) {
         var items = await CollectionProxy.SearchItemsAsync(getAttributes(key));
         if (items.Length == 0)
         {
-            throw new KeyNotFoundException($"Item with key '{key}' in folder '{AppFolder}' not found.");
+            return null;
         }
 
         var itemProxy = Connection.CreateProxy<IItem>("org.freedesktop.secrets", items[0]);
