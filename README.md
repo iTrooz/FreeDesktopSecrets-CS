@@ -3,6 +3,10 @@
 
 Client library in C# to use the Freedesktop Secret Service API
 
+# What ?
+The Freedesktop Secrets API is a standard for storing secrets (passwords, keys, etc.) in a secure way on a Linux system. It is implemented over dbus, which is a message bus system that allows communication between applications.
+This library is a C# client to use this API.
+
 # Usage
 
 Sample usage of this library:
