@@ -38,6 +38,39 @@ public class UnitTest1Test
         await storage.CreateItemAsync("TestItem", secretValue, true);
         Assert.Equal(secretValue, await storage.GetItemAsync("TestItem"));
     }
+
+    [Fact]
+    public async Task StorageReplace()
+    {
+        var storage = await connectAndGet();
+        byte[] initialValue = System.Text.Encoding.UTF8.GetBytes("InitialValue");
+        byte[] newValue = System.Text.Encoding.UTF8.GetBytes("NewValue");
+
+        await storage.CreateItemAsync("TestItem", initialValue, true);
+        Assert.Equal(initialValue, await storage.GetItemAsync("TestItem"));
+
+        await storage.CreateItemAsync("TestItem", newValue, true);
+        Assert.Equal(newValue, await storage.GetItemAsync("TestItem"));
+    }
+
+    [Fact]
+    public async Task StorageReplaceExcept()
+    {
+        var storage = await connectAndGet();
+        byte[] initialValue = System.Text.Encoding.UTF8.GetBytes("InitialValue");
+        byte[] newValue = System.Text.Encoding.UTF8.GetBytes("NewValue");
+
+        await storage.CreateItemAsync("TestItem", initialValue, true);
+        Assert.Equal(initialValue, await storage.GetItemAsync("TestItem"));
+
+        await Assert.ThrowsAsync<InvalidOperationException>(async () =>
+        {
+            await storage.CreateItemAsync("TestItem", newValue, false);
+        });
+
+        Assert.Equal(initialValue, await storage.GetItemAsync("TestItem"));
+    }
+
     [Fact]
     public async Task StorageAcrossCtonnections()
     {
@@ -76,7 +109,6 @@ public class UnitTest1Test
     public async Task ListItems()
     {
         var storage = await connectAndGet();
-
         
         var keys = await storage.ListItemKeysAsync();
         Assert.Empty(keys);

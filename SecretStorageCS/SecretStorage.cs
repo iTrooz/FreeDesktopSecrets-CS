@@ -135,7 +135,7 @@ public class SecretStorage
             var items = await CollectionProxy.SearchItemsAsync(getAttributes(key));
             if (items.Length > 0)
             {
-                throw new Exception($"Item with key '{key}' in folder '{AppFolder}' already exists. set `replace` to true to replace it.");
+                throw new InvalidOperationException($"Item with key '{key}' in folder '{AppFolder}' already exists. set `replace` to true to replace it.");
             }
         }
 
