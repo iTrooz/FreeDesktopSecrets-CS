@@ -1,5 +1,8 @@
-﻿namespace SecretStorageCS.Tests;
+﻿using System.Runtime.Versioning;
 
+namespace SecretStorageCS.Tests;
+
+[SupportedOSPlatform("linux")]
 public class UnitTest1Test
 {
     public async Task<SecretStorage> connectAndGet(string appFolder = "TestApplication")
