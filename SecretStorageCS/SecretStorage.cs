@@ -57,7 +57,7 @@ public class SecretStorage
         return new SecretStorage(new Connection(socketPath));
     }
 
-    public async Task Connect(string appFolder)
+    public async Task ConnectAsync(string appFolder)
     {
         AppFolder = appFolder;
         await Connection.ConnectAsync();
@@ -119,7 +119,7 @@ public class SecretStorage
     /// Whether to overwrite the value if something is already associated with this key.
     /// If false, an exception will be thrown if the key already exists.
     /// </param>
-    public async Task CreateItem(string key, byte[] value, bool replace)
+    public async Task CreateItemAsync(string key, byte[] value, bool replace)
     {
         var secret = new SecretStruct
         {
@@ -156,7 +156,7 @@ public class SecretStorage
     /// <summary>
     /// Retrieve the secret value associated to a given key
     /// </summary>
-    public async Task<byte[]?> GetItem(string key) {
+    public async Task<byte[]?> GetItemAsync(string key) {
         var items = await CollectionProxy.SearchItemsAsync(getAttributes(key));
         if (items.Length == 0)
         {
@@ -168,7 +168,7 @@ public class SecretStorage
         return secret.Value;
     }
 
-    public async Task<bool> DeleteItem(string key)
+    public async Task<bool> DeleteItemAsync(string key)
     {
         var items = await CollectionProxy.SearchItemsAsync(getAttributes(key));
         if (items.Length == 0)
@@ -188,7 +188,7 @@ public class SecretStorage
     /// <summary>
     /// List all keys in your app's folder
     /// </summary>
-    public async Task<List<string>> ListItemKeys()
+    public async Task<List<string>> ListItemKeysAsync()
     {
         List<string> keys = new List<string>();
         var items = await CollectionProxy.SearchItemsAsync(getAttributes(null));
@@ -200,4 +200,15 @@ public class SecretStorage
         }
         return keys;
     }
+
+
+    public void Connect(string appFolder) => ConnectAsync(appFolder).GetAwaiter().GetResult();
+
+    public void CreateItem(string key, byte[] value, bool replace) => CreateItemAsync(key, value, replace).GetAwaiter().GetResult();
+
+    public byte[]? GetItem(string key) => GetItemAsync(key).GetAwaiter().GetResult();
+
+    public bool DeleteItem(string key) => DeleteItemAsync(key).GetAwaiter().GetResult();
+
+    public List<string> ListItemKeys() => ListItemKeysAsync().GetAwaiter().GetResult();
 }

@@ -19,7 +19,7 @@ public class UnitTest1Test
             storage = SecretStorage.FromSession();
         }
 
-        await storage.Connect("TestApplication");
+        await storage.ConnectAsync("TestApplication");
         return storage;
     }
 
@@ -35,8 +35,8 @@ public class UnitTest1Test
         var storage = await connectAndGet();
         byte[] secretValue = System.Text.Encoding.UTF8.GetBytes("TestValue");
 
-        await storage.CreateItem("TestItem", secretValue, true);
-        Assert.Equal(secretValue, await storage.GetItem("TestItem"));
+        await storage.CreateItemAsync("TestItem", secretValue, true);
+        Assert.Equal(secretValue, await storage.GetItemAsync("TestItem"));
     }
     [Fact]
     public async Task StorageAcrossCtonnections()
@@ -44,11 +44,11 @@ public class UnitTest1Test
         byte[] secretValue = System.Text.Encoding.UTF8.GetBytes("TestValue");
         {
             var storage = await connectAndGet();
-            await storage.CreateItem("TestItem", secretValue, true);
+            await storage.CreateItemAsync("TestItem", secretValue, true);
         }
         {
             var storage = await connectAndGet();
-            Assert.Equal(secretValue, await storage.GetItem("TestItem"));
+            Assert.Equal(secretValue, await storage.GetItemAsync("TestItem"));
         }
     }
 
@@ -58,18 +58,18 @@ public class UnitTest1Test
         var storage = await connectAndGet();
         byte[] secretValue = System.Text.Encoding.UTF8.GetBytes("TestValue");
 
-        await storage.CreateItem("TestItem", secretValue, true);
-        Assert.Equal(secretValue, await storage.GetItem("TestItem"));
+        await storage.CreateItemAsync("TestItem", secretValue, true);
+        Assert.Equal(secretValue, await storage.GetItemAsync("TestItem"));
 
-        Assert.True(await storage.DeleteItem("TestItem"));
-        Assert.Null(await storage.GetItem("TestItem"));
+        Assert.True(await storage.DeleteItemAsync("TestItem"));
+        Assert.Null(await storage.GetItemAsync("TestItem"));
     }
 
     [Fact]
     public async Task DeleteNonExisting()
     {
         var storage = await connectAndGet();
-        Assert.False(await storage.DeleteItem("NonExisting"));
+        Assert.False(await storage.DeleteItemAsync("NonExisting"));
     }
 
     [Fact]
@@ -78,10 +78,10 @@ public class UnitTest1Test
         var storage = await connectAndGet();
         byte[] secretValue = System.Text.Encoding.UTF8.GetBytes("TestValue");
 
-        await storage.CreateItem("TestItem", secretValue, true);
-        await storage.CreateItem("TestItem2", secretValue, true);
+        await storage.CreateItemAsync("TestItem", secretValue, true);
+        await storage.CreateItemAsync("TestItem2", secretValue, true);
 
-        var keys = await storage.ListItemKeys();
+        var keys = await storage.ListItemKeysAsync();
         Assert.Equal(2, keys.Count);
         Assert.Contains("TestItem", keys);
         Assert.Contains("TestItem2", keys);

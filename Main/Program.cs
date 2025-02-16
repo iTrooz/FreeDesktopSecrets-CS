@@ -1,6 +1,6 @@
 ﻿SecretStorage storage = SecretStorage.FromSession();
-await storage.Connect("TestApplication");
-foreach (var item in await storage.ListItemKeys())
+await storage.ConnectAsync("TestApplication");
+foreach (var item in await storage.ListItemKeysAsync())
 {
     Console.WriteLine(item);
 }
