@@ -1,5 +1,6 @@
 ﻿using SecretStorageCS;
 using System.ComponentModel;
+using System.Net;
 using System.Text;
 using Tmds.DBus;
 
@@ -37,6 +38,21 @@ public class SecretStorage
   private ObjectPath Session { get; set; }
   private string AppFolder { get; set; }
   #pragma warning restore CS8618
+
+  private SecretStorage(Connection connection)
+  {
+    Connection = connection;
+  }
+
+  public static async Task<SecretStorage> FromSession()
+  {
+    return new SecretStorage(new Connection(Address.Session));
+  }
+
+  public static async Task<SecretStorage> FromSocket(string socketPath)
+  {
+    return new SecretStorage(new Connection(socketPath));
+  }
 
   public async Task Connect(string appFolder)
   {
@@ -156,7 +172,7 @@ class Program
 {
   static async Task Main()
   {
-    var secretStorage = new SecretStorage();
+    var secretStorage = await SecretStorage.FromSession();
     await secretStorage.Connect("MySuperApp");
 
     await secretStorage.CreateItem("key1", Encoding.UTF8.GetBytes("value1"), true);
