@@ -6,6 +6,4 @@ services:
       dockerfile: Dockerfile
     ports:
       - 7834:7834
-    volumes:
-      - ./sock:/tmp/sock
     restart: unless-stopped
