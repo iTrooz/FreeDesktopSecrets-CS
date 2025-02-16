@@ -9,7 +9,7 @@ sleep 1
 echo "Starting the gnome keyring daemon"
 # It seems dbus-daemon starts/replaces the keyring daemon on startup, but without unlocking it.
 # We can't simply unlock it, we have to *replace it*.
-printf '\n' | gnome-keyring-daemon --unlock --replace
+echo $UNLOCK_PASSWORD | gnome-keyring-daemon --unlock --replace
 sleep 1
 
 # Test one last time
