@@ -200,20 +200,3 @@ public class SecretStorage
     return keys;
   }
 }
-
-class Program
-{
-  static async Task Main()
-  {
-    var secretStorage = SecretStorage.FromSession();
-    await secretStorage.Connect("MySuperApp");
-
-    await secretStorage.CreateItem("key1", Encoding.UTF8.GetBytes("value1"), true);
-    await secretStorage.CreateItem("key2", Encoding.UTF8.GetBytes("value2"), true);
-
-    Console.WriteLine("Secret value of key1: " + Encoding.UTF8.GetString(await secretStorage.GetItem("key1")));
-
-    var itemKeys = await secretStorage.ListItemKeys();
-    Console.WriteLine($"List of items ({itemKeys.Count}): {string.Join(", ", itemKeys)}");
-  }
-}
