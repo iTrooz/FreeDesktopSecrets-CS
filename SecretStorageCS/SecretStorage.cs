@@ -4,6 +4,7 @@ using System.Diagnostics.Contracts;
 using System.Runtime.Versioning;
 using System.Text;
 using Tmds.DBus;
+using Microsoft.Extensions.Logging;
 
 [SupportedOSPlatform("linux")]
 public class SecretStorage
@@ -42,8 +43,11 @@ public class SecretStorage
     private ObjectPath Session { get; set; }
     private string AppFolder { get; set; } = null!;
 
+    public ILogger Logger {get; set; } = LoggerFactory.Create(builder => builder.AddConsole()).CreateLogger("SecretStorage");
+
     private SecretStorage(Connection connection)
     {
+        Logger.LogDebug("SecretStorage() instantiated");
         if (!OperatingSystem.IsLinux()) 
             throw new PlatformNotSupportedException();
 
@@ -69,7 +73,7 @@ public class SecretStorage
     {
         AppFolder = appFolder;
         await Connection.ConnectAsync();
-        Console.WriteLine("Connected !");
+        Logger.LogDebug("Connected !");
 
         await CreateSession();
         await UnlockSession();
@@ -78,7 +82,7 @@ public class SecretStorage
     private async Task CreateSession()
     {
         Session = (await ServiceProxy.OpenSessionAsync("plain", "my-session")).result;
-        Console.WriteLine($"Created session: {Session}");
+        Logger.LogDebug($"Created session: {Session}");
     }
 
     private async Task UnlockSession()
@@ -86,25 +90,25 @@ public class SecretStorage
         var (unlocked, unlockPrompt) = await ServiceProxy.UnlockAsync(new ObjectPath[] { DEFAULT_COLLECTION });
         if (unlockPrompt == "/")
         {
-            Console.WriteLine("No need to prompt for unlocking");
+            Logger.LogDebug("No need to prompt for unlocking");
         }
         else
         {
-            Console.WriteLine("Unlocking failed. Prompting for unlocking");
+            Logger.LogInformation("Basic unlocking failed. Prompting API for unlocking");
             var promptProxy = Connection.CreateProxy<IPrompt>("org.freedesktop.secrets", unlockPrompt);
 
             // Unlock and wait for unlock to complete
             var tcs = new TaskCompletionSource<bool>();
             var watch = await promptProxy.WatchCompletedAsync((result) =>
             {
-                Console.WriteLine($"Unlock prompt completed: {result}");
+                Logger.LogInformation($"Unlock prompt completed: {result}");
                 tcs.SetResult(true);
             });
             await promptProxy.PromptAsync("");
             await tcs.Task;
         }
 
-        Console.WriteLine($"Unlocked [{string.Join(", ", unlocked)}] ({unlocked.Length}). Prompt: {unlockPrompt}");
+        Logger.LogDebug($"Unlocked [{string.Join(", ", unlocked)}] ({unlocked.Length}). Prompt: {unlockPrompt}");
     }
 
     private Dictionary<string, string> getAttributes(string? key)
@@ -158,7 +162,7 @@ public class SecretStorage
           // It will replace if it finds secrets with the same *attributes*
           true
         );
-        Console.WriteLine($"Secret created (createdItem: {createdItem}, prompt: {prompt})");
+        Logger.LogDebug($"Secret created (createdItem: {createdItem}, prompt: {prompt})");
     }
 
     /// <summary>
@@ -185,7 +189,7 @@ public class SecretStorage
         }
         else if (items.Length > 1)
         {
-            Console.WriteLine($"Multiple items with key '{key}' in folder '{AppFolder}' found. This should not happen. Deleting the first one.");
+            Logger.LogWarning($"Multiple items with key '{key}' in folder '{AppFolder}' found. This should not happen. Deleting the first one.");
         }
 
         var itemProxy = Connection.CreateProxy<IItem>("org.freedesktop.secrets", items[0]);
