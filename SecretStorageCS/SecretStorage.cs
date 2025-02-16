@@ -114,11 +114,11 @@ public class SecretStorage
 
     /// <summary>
     /// Store a secret value associated to the given key
+    /// </summary>
     /// <param name="replace">
     /// Whether to overwrite the value if something is already associated with this key.
     /// If false, an exception will be thrown if the key already exists.
     /// </param>
-    /// </summary>
     public async Task CreateItem(string key, byte[] value, bool replace)
     {
         var secret = new SecretStruct
