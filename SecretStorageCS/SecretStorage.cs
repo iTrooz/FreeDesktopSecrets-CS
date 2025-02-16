@@ -33,13 +33,11 @@ public class SecretStorage
 
     private const string DEFAULT_COLLECTION = "/org/freedesktop/secrets/aliases/default";
 
-#pragma warning disable CS8618
     private Connection Connection { get; set; }
     private IService ServiceProxy { get; set; }
     private ICollection CollectionProxy { get; set; }
     private ObjectPath Session { get; set; }
-    private string AppFolder { get; set; }
-#pragma warning restore CS8618
+    private string AppFolder { get; set; } = null!;
 
     private SecretStorage(Connection connection)
     {
@@ -101,7 +99,7 @@ public class SecretStorage
         Console.WriteLine($"Unlocked [{string.Join(", ", unlocked)}] ({unlocked.Length}). Prompt: {unlockPrompt}");
     }
 
-    private Dictionary<string, string> getAttributes(string key)
+    private Dictionary<string, string> getAttributes(string? key)
     {
         var d = new Dictionary<string, string>
     {
