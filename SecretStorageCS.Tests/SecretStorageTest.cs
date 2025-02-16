@@ -10,10 +10,10 @@ public class UnitTest1Test
         {
             Console.WriteLine("Using container dbus");
             Console.WriteLine("Current working directory: " + Directory.GetCurrentDirectory());
-            storage = await SecretStorage.FromSocket("tcp:host=localhost,port=7834");
+            storage = SecretStorage.FromSocket("tcp:host=localhost,port=7834");
         } else {
             Console.WriteLine("Using real dbus");
-            storage = await SecretStorage.FromSession();
+            storage = SecretStorage.FromSession();
         }
 
         await storage.Connect("TestApplication");

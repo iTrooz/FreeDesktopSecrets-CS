@@ -44,12 +44,12 @@ public class SecretStorage
     Connection = connection;
   }
 
-  public static async Task<SecretStorage> FromSession()
+  public static SecretStorage FromSession()
   {
     return new SecretStorage(new Connection(Address.Session));
   }
 
-  public static async Task<SecretStorage> FromSocket(string socketPath)
+  public static SecretStorage FromSocket(string socketPath)
   {
     return new SecretStorage(new Connection(socketPath));
   }
@@ -176,7 +176,7 @@ class Program
 {
   static async Task Main()
   {
-    var secretStorage = await SecretStorage.FromSession();
+    var secretStorage = SecretStorage.FromSession();
     await secretStorage.Connect("MySuperApp");
 
     await secretStorage.CreateItem("key1", Encoding.UTF8.GetBytes("value1"), true);
