@@ -5,6 +5,9 @@ using Tmds.DBus;
 public class SecretStorage
 {
 
+  /// <summary>
+  ///  Manages secrets for a given folder, in the default secrets collection
+  /// </summary>
   struct SecretStruct
   {
 
@@ -110,6 +113,13 @@ public class SecretStorage
     return d;
   }
 
+  /// <summary>
+  /// Store a secret value associated to the given key
+  /// <param name="replace">
+  /// Whether to overwrite the value if something is already associated with this key.
+  /// If false, an exception will be thrown if the key already exists.
+  /// </param>
+  /// </summary>
   public async Task CreateItem(string key, byte[] value, bool replace)
   {
     var secret = new SecretStruct
@@ -143,6 +153,9 @@ public class SecretStorage
     Console.WriteLine($"Secret created (createdItem: {createdItem}, prompt: {prompt})");
   }
 
+  /// <summary>
+  /// Retrieve the secret value associated to a given key
+  /// </summary>
   public async Task<byte[]> GetItem(string key)
   {
     var items = await CollectionProxy.SearchItemsAsync(getAttributes(key));
@@ -156,6 +169,9 @@ public class SecretStorage
     return secret.Value;
   }
 
+  /// <summary>
+  /// List all keys in your app's folder
+  /// </summary>
   public async Task<List<string>> ListItemKeys()
   {
     List<string> keys = new List<string>();
