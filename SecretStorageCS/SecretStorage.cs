@@ -1,6 +1,7 @@
 ﻿#nullable enable
 using SecretStorageCS;
 using System.Diagnostics.Contracts;
+using System.Runtime.Versioning;
 using System.Text;
 using Tmds.DBus;
 
@@ -42,6 +43,9 @@ public class SecretStorage
 
     private SecretStorage(Connection connection)
     {
+        if (!OperatingSystem.IsLinux()) 
+            throw new PlatformNotSupportedException();
+
         Connection = connection;
         // Create proxies to call methods
         ServiceProxy = Connection.CreateProxy<IService>("org.freedesktop.secrets", "/org/freedesktop/secrets");
@@ -49,12 +53,14 @@ public class SecretStorage
     }
 
     [Pure]
+    [SupportedOSPlatform("linux")]
     public static SecretStorage FromSession()
     {
         return new SecretStorage(new Connection(Address.Session));
     }
 
     [Pure]
+    [SupportedOSPlatform("linux")]
     public static SecretStorage FromSocket(string socketPath)
     {
         return new SecretStorage(new Connection(socketPath));
