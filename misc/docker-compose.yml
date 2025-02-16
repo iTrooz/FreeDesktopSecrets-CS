@@ -1,0 +1,11 @@
+services:
+  dbus:
+    image: dbus:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - DBUS_SESSION_BUS_ADDRESS=/var/run/dbus/system_bus_socket
+    volumes:
+      - ./sock:/tmp/sock
+    restart: unless-stopped
