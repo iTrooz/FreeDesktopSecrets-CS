@@ -2,7 +2,7 @@
 
 public class UnitTest1Test
 {
-    public async Task<SecretStorage> connectAndGet()
+    public async Task<SecretStorage> connectAndGet(string appFolder = "TestApplication")
     {
         var useRealDbus = Environment.GetEnvironmentVariable("USE_REAL_DBUS");
         SecretStorage storage;
@@ -19,7 +19,7 @@ public class UnitTest1Test
             storage = SecretStorage.FromSession();
         }
 
-        await storage.ConnectAsync("TestApplication");
+        await storage.ConnectAsync(appFolder);
         return storage;
     }
 
@@ -105,11 +105,20 @@ public class UnitTest1Test
         Assert.False(await storage.DeleteItemAsync("NonExisting"));
     }
 
+    private async Task clearAllData(SecretStorage storage) {
+        var keys = await storage.ListItemKeysAsync();
+        foreach (var key in keys)
+        {
+            await storage.DeleteItemAsync(key);
+        }
+    }
+
     [Fact]
     public async Task ListItems()
     {
-        var storage = await connectAndGet();
-        
+        var storage = await connectAndGet("list1");
+        await clearAllData(storage);
+
         var keys = await storage.ListItemKeysAsync();
         Assert.Empty(keys);
 
