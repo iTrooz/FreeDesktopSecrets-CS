@@ -44,6 +44,9 @@ public class SecretStorage
     private SecretStorage(Connection connection)
     {
         Connection = connection;
+        // Create proxies to call methods
+        ServiceProxy = Connection.CreateProxy<IService>("org.freedesktop.secrets", "/org/freedesktop/secrets");
+        CollectionProxy = Connection.CreateProxy<ICollection>("org.freedesktop.secrets", DEFAULT_COLLECTION);
     }
 
     public static SecretStorage FromSession()
@@ -61,10 +64,6 @@ public class SecretStorage
         AppFolder = appFolder;
         await Connection.ConnectAsync();
         Console.WriteLine("Connected !");
-
-        // Create proxies to call methods
-        ServiceProxy = Connection.CreateProxy<IService>("org.freedesktop.secrets", "/org/freedesktop/secrets");
-        CollectionProxy = Connection.CreateProxy<ICollection>("org.freedesktop.secrets", DEFAULT_COLLECTION);
 
         await CreateSession();
         await UnlockSession();
