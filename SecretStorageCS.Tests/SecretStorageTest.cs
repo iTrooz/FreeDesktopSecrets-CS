@@ -1,4 +1,4 @@
-﻿namespace SecretStorageCS.Tests;
+namespace SecretStorageCS.Tests;
 
 public class UnitTest1Test
 {
@@ -34,5 +34,18 @@ public class UnitTest1Test
 
         await storage.CreateItem("TestItem", secretValue, true);
         Assert.Equal(secretValue, await storage.GetItem("TestItem"));
+    }
+    [Fact]
+    public async Task StorageAcrossCtonnections()
+    {
+        byte[] secretValue = System.Text.Encoding.UTF8.GetBytes("TestValue");
+        {
+            var storage = await connectAndGet();
+            await storage.CreateItem("TestItem", secretValue, true);
+        }
+        {
+            var storage = await connectAndGet();
+            Assert.Equal(secretValue, await storage.GetItem("TestItem"));
+        }
     }
 }
