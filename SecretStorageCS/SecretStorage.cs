@@ -1,5 +1,6 @@
 ﻿#nullable enable
 using SecretStorageCS;
+using System.Diagnostics.Contracts;
 using System.Text;
 using Tmds.DBus;
 
@@ -47,11 +48,13 @@ public class SecretStorage
         CollectionProxy = Connection.CreateProxy<ICollection>("org.freedesktop.secrets", DEFAULT_COLLECTION);
     }
 
+    [Pure]
     public static SecretStorage FromSession()
     {
         return new SecretStorage(new Connection(Address.Session));
     }
 
+    [Pure]
     public static SecretStorage FromSocket(string socketPath)
     {
         return new SecretStorage(new Connection(socketPath));
