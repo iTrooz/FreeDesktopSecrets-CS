@@ -3,9 +3,6 @@
 
 Client library in C# to use the Freedesktop Secret Service API
 
-
-Reference: https://specifications.freedesktop.org/secret-service-spec/latest-single
-
 # Usage
 
 Sample usage of this library:
@@ -23,3 +20,8 @@ Console.WriteLine(System.Text.Encoding.UTF8.GetString(secret!)); // "TestString"
 
 await storage.DeleteItemAsync("TestItem"); // Delete the secret
 ```
+
+# Links
+- Thanks to tmds for his [dbus library](https://github.com/tmds/Tmds.DBus)
+- Inspiration: https://github.com/mitya57/secretstorage
+- API Specification: https://specifications.freedesktop.org/- secret-service-spec/latest-single
