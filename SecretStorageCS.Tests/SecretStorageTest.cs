@@ -61,4 +61,24 @@ public class UnitTest1Test
         await storage.DeleteItem("TestItem");
         await Assert.ThrowsAsync<KeyNotFoundException>(async () => await storage.GetItem("TestItem"));
     }
+
+    public async Task DeleteNonExisting()
+    {
+        var storage = await connectAndGet();
+        await Assert.ThrowsAsync<KeyNotFoundException>(async () => await storage.DeleteItem("NonExisting"));
+    }
+
+    public async Task ListItems()
+    {
+        var storage = await connectAndGet();
+        byte[] secretValue = System.Text.Encoding.UTF8.GetBytes("TestValue");
+
+        await storage.CreateItem("TestItem", secretValue, true);
+        await storage.CreateItem("TestItem2", secretValue, true);
+
+        var keys = await storage.ListItemKeys();
+        Assert.Equal(2, keys.Count);
+        Assert.Contains("TestItem", keys);
+        Assert.Contains("TestItem2", keys);
+    }
 }
