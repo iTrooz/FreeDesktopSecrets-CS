@@ -61,7 +61,7 @@ public class UnitTest1Test
         await storage.CreateItem("TestItem", secretValue, true);
         Assert.Equal(secretValue, await storage.GetItem("TestItem"));
 
-        await storage.DeleteItem("TestItem");
+        Assert.True(await storage.DeleteItem("TestItem"));
         Assert.Null(await storage.GetItem("TestItem"));
     }
 
