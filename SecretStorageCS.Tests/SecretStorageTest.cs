@@ -1,4 +1,4 @@
-namespace SecretStorageCS.Tests;
+﻿namespace SecretStorageCS.Tests;
 
 public class UnitTest1Test
 {
@@ -47,5 +47,18 @@ public class UnitTest1Test
             var storage = await connectAndGet();
             Assert.Equal(secretValue, await storage.GetItem("TestItem"));
         }
+    }
+
+    [Fact]
+    public async Task Deletion()
+    {
+        var storage = await connectAndGet();
+        byte[] secretValue = System.Text.Encoding.UTF8.GetBytes("TestValue");
+
+        await storage.CreateItem("TestItem", secretValue, true);
+        Assert.Equal(secretValue, await storage.GetItem("TestItem"));
+
+        await storage.DeleteItem("TestItem");
+        await Assert.ThrowsAsync<KeyNotFoundException>(async () => await storage.GetItem("TestItem"));
     }
 }

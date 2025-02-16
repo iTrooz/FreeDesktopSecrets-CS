@@ -161,12 +161,27 @@ public class SecretStorage
     var items = await CollectionProxy.SearchItemsAsync(getAttributes(key));
     if (items.Length == 0)
     {
-      throw new Exception($"Item with key '{key}' in folder '{AppFolder}' not found.");
+      throw new KeyNotFoundException($"Item with key '{key}' in folder '{AppFolder}' not found.");
     }
 
     var itemProxy = Connection.CreateProxy<IItem>("org.freedesktop.secrets", items[0]);
     SecretStruct secret = new SecretStruct(await itemProxy.GetSecretAsync(Session));
     return secret.Value;
+  }
+
+  public async Task DeleteItem(string key)
+  {
+    var items = await CollectionProxy.SearchItemsAsync(getAttributes(key));
+    if (items.Length == 0)
+    {
+      throw new KeyNotFoundException($"Item with key '{key}' in folder '{AppFolder}' not found.");
+    } else if (items.Length > 1)
+    {
+      Console.WriteLine($"Multiple items with key '{key}' in folder '{AppFolder}' found. This should not happen. Deleting the first one.");
+    }
+
+    var itemProxy = Connection.CreateProxy<IItem>("org.freedesktop.secrets", items[0]);
+    await itemProxy.DeleteAsync();
   }
 
   /// <summary>
