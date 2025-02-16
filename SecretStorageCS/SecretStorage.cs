@@ -92,7 +92,7 @@ public class SecretStorage
         Logger.LogDebug("Connected !");
 
         await CreateSession();
-        await UnlockSession();
+        await UnlockCollection();
     }
 
     private async Task CreateSession()
@@ -101,7 +101,7 @@ public class SecretStorage
         Logger.LogDebug($"Created session: {Session}");
     }
 
-    private async Task UnlockSession()
+    private async Task UnlockCollection()
     {
         var (unlocked, unlockPrompt) = await ServiceProxy.UnlockAsync(new ObjectPath[] { DEFAULT_COLLECTION });
         if (unlockPrompt == "/")
