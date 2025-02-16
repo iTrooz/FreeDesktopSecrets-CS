@@ -85,8 +85,15 @@ public class SecretStorage
     {
       Console.WriteLine("Unlocking failed. Prompting for unlocking");
       var promptProxy = Connection.CreateProxy<IPrompt>("org.freedesktop.secrets", unlockPrompt);
-      var watch = await promptProxy.WatchCompletedAsync((result) => { Console.WriteLine($"Prompt completed: {result}"); });
+
+      // Unlock and wait for unlock to complete
+      var tcs = new TaskCompletionSource<bool>();
+      var watch = await promptProxy.WatchCompletedAsync((result) => {
+        Console.WriteLine($"Unlock prompt completed: {result}");
+        tcs.SetResult(true);
+      });
       await promptProxy.PromptAsync("");
+      await tcs.Task;
     }
 
     Console.WriteLine($"Unlocked [{string.Join(", ", unlocked)}] ({unlocked.Length}). Prompt: {unlockPrompt}");
