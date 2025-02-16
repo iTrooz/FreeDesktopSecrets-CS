@@ -3,7 +3,7 @@
 namespace SecretStorageCS.Tests;
 
 [SupportedOSPlatform("linux")]
-public class UnitTest1Test
+public class SecretStorageTest
 {
     public async Task<SecretStorage> connectAndGet(string appFolder = "TestApplication")
     {
