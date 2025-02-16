@@ -3,7 +3,7 @@
 echo "Starting dbus daemon"
 
 # Can't use --fork, or we can't use `wait` (process is not a child of this shell)
-dbus-daemon --address=tcp:host=0.0.0.0,port=7834 --session&
+dbus-daemon --address=$DBUS_SESSION_BUS_ADDRESS --session&
 sleep 1
 
 echo "Starting the gnome keyring daemon"
