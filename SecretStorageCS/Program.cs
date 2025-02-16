@@ -1,6 +1,4 @@
 ﻿using SecretStorageCS;
-using System.ComponentModel;
-using System.Net;
 using System.Text;
 using Tmds.DBus;
 
