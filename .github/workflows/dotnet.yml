@@ -24,6 +24,9 @@ jobs:
 
     - name: Build
       run: dotnet build --no-restore
+    
+    - name: Setup dbus and secrets API for tests
+      run: cd misc && docker compose up -d
 
     - name: Test
       run: dotnet test --no-build --verbosity normal
