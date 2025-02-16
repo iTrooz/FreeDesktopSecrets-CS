@@ -17,10 +17,9 @@ RUN <<EOF
 
     # Test
     dbus-send --session --dest=org.freedesktop.DBus --type=method_call --print-reply / org.freedesktop.DBus.ListNames
-    
+
     # Setup gnome-keyring
-    printf '\n' | gnome-keyring-daemon --unlock
-    printf '\n' | gnome-keyring-daemon --start
+    printf '\n' | gnome-keyring-daemon --unlock # will start too
     sleep 1
 
     # Test
@@ -29,4 +28,5 @@ RUN <<EOF
 EOF
 
 EXPOSE 7834/tcp
-CMD ["dbus-daemon", "--address=tcp:host=0.0.0.0,port=7834", "--session"]
+COPY start.sh .
+ENTRYPOINT ["./start.sh"]
