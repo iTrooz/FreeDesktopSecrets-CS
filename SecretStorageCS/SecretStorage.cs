@@ -5,6 +5,7 @@ using System.Runtime.Versioning;
 using System.Text;
 using Tmds.DBus;
 
+[SupportedOSPlatform("linux")]
 public class SecretStorage
 {
 
@@ -53,14 +54,12 @@ public class SecretStorage
     }
 
     [Pure]
-    [SupportedOSPlatform("linux")]
     public static SecretStorage FromSession()
     {
         return new SecretStorage(new Connection(Address.Session));
     }
 
     [Pure]
-    [SupportedOSPlatform("linux")]
     public static SecretStorage FromSocket(string socketPath)
     {
         return new SecretStorage(new Connection(socketPath));
