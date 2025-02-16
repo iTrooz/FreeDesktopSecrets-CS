@@ -5,6 +5,7 @@ public class UnitTest1Test
     public async Task<SecretStorage> connectAndGet() {
         var useRealDbus = Environment.GetEnvironmentVariable("USE_REAL_DBUS");
         SecretStorage storage;
+        // Make it the default, because I don't want users testing with their real secrets API by mistake
         if (string.IsNullOrEmpty(useRealDbus))
         {
             Console.WriteLine("Using container dbus");
