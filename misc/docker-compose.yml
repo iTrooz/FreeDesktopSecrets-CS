@@ -4,8 +4,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    environment:
-      - DBUS_SESSION_BUS_ADDRESS=/var/run/dbus/system_bus_socket
+    ports:
+      - 7834:7834
     volumes:
       - ./sock:/tmp/sock
     restart: unless-stopped

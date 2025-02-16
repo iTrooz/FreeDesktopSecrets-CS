@@ -2,34 +2,33 @@
 
 public class UnitTest1Test
 {
-    [Fact]
-    public void Test1()
-    {
-        // Arrange
-        int a = 1;
-        int b = 1;
-        int expected = 2;
+    public async Task<SecretStorage> connectAndGet() {
+        var useRealDbus = Environment.GetEnvironmentVariable("USE_REAL_DBUS");
+        SecretStorage storage;
+        if (string.IsNullOrEmpty(useRealDbus))
+        {
+            Console.WriteLine("Using container dbus");
+            Console.WriteLine("Current working directory: " + Directory.GetCurrentDirectory());
+            storage = await SecretStorage.FromSocket("tcp:host=localhost,port=7834");
+        } else {
+            Console.WriteLine("Using real dbus");
+            storage = await SecretStorage.FromSession();
+        }
 
-        // Act
-        int result = a + b;
-
-        // Assert
-        Assert.Equal(expected, result);
+        await storage.Connect("TestApplication");
+        return storage;
     }
 
     [Fact]
     public async Task Connectivity()
     {
-        SecretStorage storage = new SecretStorage();
-        await storage.Connect("TestApplication");
+        await connectAndGet();
     }
 
     [Fact]
-    public async Task SecretStorage()
+    public async Task Storage()
     {
-        SecretStorage storage = new SecretStorage();
-        await storage.Connect("TestApplication");
-
+        var storage = await connectAndGet();
         byte[] secretValue = System.Text.Encoding.UTF8.GetBytes("TestValue");
 
         await storage.CreateItem("TestItem", secretValue, true);

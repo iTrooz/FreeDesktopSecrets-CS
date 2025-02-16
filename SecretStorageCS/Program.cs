@@ -57,7 +57,6 @@ public class SecretStorage
   public async Task Connect(string appFolder)
   {
     AppFolder = appFolder;
-    Connection = new Connection(Address.Session);
     await Connection.ConnectAsync();
     Console.WriteLine("Connected !");
 
@@ -128,8 +127,6 @@ public class SecretStorage
     var (createdItem, prompt) = await CollectionProxy.CreateItemAsync(
       new Dictionary<string, object>
       {
-        ["application"] = "MyApp/my-app",
-        ["service"] = "MyApp",
         ["org.freedesktop.Secret.Item.Label"] = AppFolder + "/" + key,
         ["org.freedesktop.Secret.Item.Attributes"] = getAttributes(key),
       },
