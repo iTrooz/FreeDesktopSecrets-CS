@@ -168,12 +168,12 @@ public class SecretStorage
         return secret.Value;
     }
 
-    public async Task DeleteItem(string key)
+    public async Task<bool> DeleteItem(string key)
     {
         var items = await CollectionProxy.SearchItemsAsync(getAttributes(key));
         if (items.Length == 0)
         {
-            throw new KeyNotFoundException($"Item with key '{key}' in folder '{AppFolder}' not found.");
+            return false;
         }
         else if (items.Length > 1)
         {
@@ -182,6 +182,7 @@ public class SecretStorage
 
         var itemProxy = Connection.CreateProxy<IItem>("org.freedesktop.secrets", items[0]);
         await itemProxy.DeleteAsync();
+        return true;
     }
 
     /// <summary>

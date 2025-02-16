@@ -69,7 +69,7 @@ public class UnitTest1Test
     public async Task DeleteNonExisting()
     {
         var storage = await connectAndGet();
-        await Assert.ThrowsAsync<KeyNotFoundException>(async () => await storage.DeleteItem("NonExisting"));
+        Assert.False(await storage.DeleteItem("NonExisting"));
     }
 
     [Fact]
