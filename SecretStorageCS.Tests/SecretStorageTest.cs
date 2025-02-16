@@ -76,12 +76,17 @@ public class UnitTest1Test
     public async Task ListItems()
     {
         var storage = await connectAndGet();
+
+        
+        var keys = await storage.ListItemKeysAsync();
+        Assert.Empty(keys);
+
         byte[] secretValue = System.Text.Encoding.UTF8.GetBytes("TestValue");
 
         await storage.CreateItemAsync("TestItem", secretValue, true);
         await storage.CreateItemAsync("TestItem2", secretValue, true);
 
-        var keys = await storage.ListItemKeysAsync();
+        keys = await storage.ListItemKeysAsync();
         Assert.Equal(2, keys.Count);
         Assert.Contains("TestItem", keys);
         Assert.Contains("TestItem2", keys);
