@@ -6,7 +6,7 @@ FROM ubuntu:latest
 RUN --mount=type=cache,target=/var/cache/apt \
     apt-get update && apt-get install -y dbus gnome-keyring libsecret-tools
 
-ENV DBUS_SESSION_BUS_ADDRESS=tcp:host=localhost,port=7834
+ENV DBUS_SESSION_BUS_ADDRESS=tcp:host=0.0.0.0,port=7834
 ENV UNLOCK_PASSWORD=unlockPassword
 
 COPY session.conf /etc/dbus-1/session.conf
