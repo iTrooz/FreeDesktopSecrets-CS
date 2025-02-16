@@ -6,6 +6,10 @@ using System.Text;
 using Tmds.DBus;
 using Microsoft.Extensions.Logging;
 
+/// <summary>
+/// Allows you to interact with the Freedesktop Secrets API, in a simplified way
+/// You can store key-values pairs in a secure way using this API.
+/// </summary>
 [SupportedOSPlatform("linux")]
 public class SecretStorage
 {
@@ -57,18 +61,30 @@ public class SecretStorage
         CollectionProxy = Connection.CreateProxy<ICollection>("org.freedesktop.secrets", DEFAULT_COLLECTION);
     }
 
+    /// <summary>
+    /// Creates a SecretStorage instance using the default session dbus bus
+    /// </summary>
     [Pure]
     public static SecretStorage FromSession()
     {
         return new SecretStorage(new Connection(Address.Session));
     }
 
+    /// <summary>
+    /// Creates a SecretStorage instance, and uses the given socket path to connect to the DBus
+    /// </summary>
+    /// <param name="socketPath">path to the socket file managed by a dbus daemon</param>
     [Pure]
     public static SecretStorage FromSocket(string socketPath)
     {
         return new SecretStorage(new Connection(socketPath));
     }
 
+    /// <summary>
+    /// Connects to DBus and unlock the Secrets API collection
+    /// This method must be called called before calling any other method, and must be only called once in the lifetime of the object.
+    /// </summary>
+    /// <param name="appFolder">name to use for the API "folder" that will contain all secrets</param>
     public async Task ConnectAsync(string appFolder)
     {
         AppFolder = appFolder;
