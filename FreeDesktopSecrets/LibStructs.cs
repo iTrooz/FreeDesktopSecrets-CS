@@ -4,7 +4,7 @@ namespace iTrooz.FreeDesktopSecrets;
 
 
 [DBusInterface("org.freedesktop.Secret.Service")]
-public interface IService : IDBusObject
+internal interface IService : IDBusObject
 {
   Task<(object output, ObjectPath result)> OpenSessionAsync(string algorithm, object input);
   Task<(ObjectPath[] unlocked, ObjectPath prompt)> UnlockAsync(ObjectPath[] objects);
@@ -12,7 +12,7 @@ public interface IService : IDBusObject
 }
 
 [DBusInterface("org.freedesktop.Secret.Collection")]
-public interface ICollection : IDBusObject
+internal interface ICollection : IDBusObject
 {
   Task<(ObjectPath item, ObjectPath prompt)> CreateItemAsync(IDictionary<string, object> properties, (ObjectPath, byte[], byte[], string) secret, bool replace);
   Task<CollectionProperties> GetAllAsync();
@@ -20,10 +20,10 @@ public interface ICollection : IDBusObject
 }
 
 [Dictionary]
-public class CollectionProperties
+internal class CollectionProperties
 {
   private ObjectPath[] _Items = default(ObjectPath[]);
-  public ObjectPath[] Items
+  internal ObjectPath[] Items
   {
     get
     {
@@ -37,7 +37,7 @@ public class CollectionProperties
   }
 
   private string _Label = default(string);
-  public string Label
+  internal string Label
   {
     get
     {
@@ -51,7 +51,7 @@ public class CollectionProperties
   }
 
   private bool _Locked = default(bool);
-  public bool Locked
+  internal bool Locked
   {
     get
     {
@@ -65,7 +65,7 @@ public class CollectionProperties
   }
 
   private ulong _Created = default(ulong);
-  public ulong Created
+  internal ulong Created
   {
     get
     {
@@ -79,7 +79,7 @@ public class CollectionProperties
   }
 
   private ulong _Modified = default(ulong);
-  public ulong Modified
+  internal ulong Modified
   {
     get
     {
@@ -95,14 +95,14 @@ public class CollectionProperties
 
 
 [DBusInterface("org.freedesktop.Secret.Prompt")]
-public interface IPrompt : IDBusObject
+internal interface IPrompt : IDBusObject
 {
   Task PromptAsync(String windowID);
   Task<IDisposable> WatchCompletedAsync(Action<(bool dismissed, object result)> handler);
 }
 
 [DBusInterface("org.freedesktop.Secret.Item")]
-public interface IItem : IDBusObject
+internal interface IItem : IDBusObject
 {
   Task<ObjectPath> DeleteAsync();
   Task<(ObjectPath secret, byte[], byte[], string)> GetSecretAsync(ObjectPath Session);
@@ -114,10 +114,10 @@ public interface IItem : IDBusObject
 }
 
 [Dictionary]
-public class ItemProperties
+internal class ItemProperties
 {
   private bool _Locked = default(bool);
-  public bool Locked
+  internal bool Locked
   {
     get
     {
@@ -131,7 +131,7 @@ public class ItemProperties
   }
 
   private IDictionary<string, string> _Attributes = default(IDictionary<string, string>);
-  public IDictionary<string, string> Attributes
+  internal IDictionary<string, string> Attributes
   {
     get
     {
@@ -145,7 +145,7 @@ public class ItemProperties
   }
 
   private string _Label = default(string);
-  public string Label
+  internal string Label
   {
     get
     {
@@ -159,7 +159,7 @@ public class ItemProperties
   }
 
   private string _Type = default(string);
-  public string Type
+  internal string Type
   {
     get
     {
@@ -173,7 +173,7 @@ public class ItemProperties
   }
 
   private ulong _Created = default(ulong);
-  public ulong Created
+  internal ulong Created
   {
     get
     {
@@ -187,7 +187,7 @@ public class ItemProperties
   }
 
   private ulong _Modified = default(ulong);
-  public ulong Modified
+  internal ulong Modified
   {
     get
     {
