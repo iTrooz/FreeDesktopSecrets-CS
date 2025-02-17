@@ -32,3 +32,6 @@ await storage.DeleteItemAsync("TestItem"); // Delete the secret
 - Thanks to tmds for his [dbus library](https://github.com/tmds/Tmds.DBus)
 - Inspiration: https://github.com/mitya57/FreeDesktopSecrets
 - API Specification: https://specifications.freedesktop.org/- secret-service-spec/latest-single
+
+# Licence
+LGPL-2.1 OR	LGPL-3.0-or-later with proxy clause (proxy being me, iTrooz)
