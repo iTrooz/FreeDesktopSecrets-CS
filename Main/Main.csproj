@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\SecretStorageCS\SecretStorageCS.csproj" />
+    <ProjectReference Include="..\FreeDesktopSecrets\FreeDesktopSecrets.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

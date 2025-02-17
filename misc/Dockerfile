@@ -1,5 +1,5 @@
 # This image contains a dbus session bus exposed over TCP and a gnome-keyring daemon.
-# The goal is to be able to use the Freedesktop secret service API with this.
+# The goal is to be able to use the Freedesktop secrets API with this.
 FROM ubuntu:latest
 
 # Install necessary packages

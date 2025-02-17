@@ -1,25 +1,25 @@
 ﻿using System.Runtime.Versioning;
 
-namespace SecretStorageCS.Tests;
+namespace iTrooz.FreeDesktopSecrets.Tests;
 
 [SupportedOSPlatform("linux")]
-public class SecretStorageTest
+public class FreeDesktopSecretsTest
 {
-    public async Task<SecretStorage> connectAndGet(string appFolder = "TestApplication")
+    public async Task<FreeDesktopSecretsClient> connectAndGet(string appFolder = "TestApplication")
     {
         var useRealDbus = Environment.GetEnvironmentVariable("USE_REAL_DBUS");
-        SecretStorage storage;
+        FreeDesktopSecretsClient storage;
         // Make it the default, because I don't want users testing with their real secrets API by mistake
         if (string.IsNullOrEmpty(useRealDbus))
         {
             Console.WriteLine("Using container dbus");
             Console.WriteLine("Current working directory: " + Directory.GetCurrentDirectory());
-            storage = SecretStorage.FromSocket("tcp:host=localhost,port=7834");
+            storage = FreeDesktopSecretsClient.FromSocket("tcp:host=localhost,port=7834");
         }
         else
         {
             Console.WriteLine("Using real dbus");
-            storage = SecretStorage.FromSession();
+            storage = FreeDesktopSecretsClient.FromSession();
         }
 
         await storage.ConnectAsync(appFolder);
@@ -108,7 +108,7 @@ public class SecretStorageTest
         Assert.False(await storage.DeleteItemAsync("NonExisting"));
     }
 
-    private async Task clearAllData(SecretStorage storage) {
+    private async Task clearAllData(FreeDesktopSecretsClient storage) {
         var keys = await storage.ListItemKeysAsync();
         foreach (var key in keys)
         {

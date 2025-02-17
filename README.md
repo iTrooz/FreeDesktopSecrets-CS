@@ -1,7 +1,7 @@
 
-# SecretStorage-CS
+# FreeDesktopSecrets-CS
 
-Client library in C# to use the Freedesktop Secret Service API
+Client library in C# to use the Freedesktop Secrets API
 
 # What ?
 The Freedesktop Secrets API is a standard for storing secrets (passwords, keys, etc.) in a secure way on a Linux system. It is implemented over dbus, which is a message bus system that allows communication between applications.
@@ -11,7 +11,7 @@ This library is a C# client to use this API.
 
 Sample usage of this library:
 ```csharp
-var storage = SecretStorage.FromSession(); // use the classic dbus session bus
+var storage = FreeDesktopSecretsClient.FromSession(); // use the classic dbus session bus
 await storage.ConnectAsync("TestApplication"); // Use this name for the API "folder" that will hold secrets
 
 var itemKeys = await storage.ListItemKeysAsync(); // List keys of all secrets stored
@@ -27,5 +27,5 @@ await storage.DeleteItemAsync("TestItem"); // Delete the secret
 
 # Links
 - Thanks to tmds for his [dbus library](https://github.com/tmds/Tmds.DBus)
-- Inspiration: https://github.com/mitya57/secretstorage
+- Inspiration: https://github.com/mitya57/FreeDesktopSecrets
 - API Specification: https://specifications.freedesktop.org/- secret-service-spec/latest-single

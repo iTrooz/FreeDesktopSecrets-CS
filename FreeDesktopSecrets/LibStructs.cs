@@ -1,6 +1,6 @@
 using Tmds.DBus;
 
-namespace SecretStorageCS;
+namespace iTrooz.FreeDesktopSecrets;
 
 
 [DBusInterface("org.freedesktop.Secret.Service")]

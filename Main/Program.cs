@@ -6,7 +6,7 @@ class Program
 {
     static async Task Main(string[] args)
     {
-        var storage = SecretStorage.FromSession(); // use the classic dbus session bus
+        var storage = FreeDesktopSecretsClient.FromSession(); // use the classic dbus session bus
         storage.Logger = LoggerFactory.Create(builder => builder.AddConsole().SetMinimumLevel(LogLevel.Trace)).CreateLogger("Program");
         await storage.ConnectAsync("TestApplication"); // Use this name for the API "folder" that will hold secrets
 

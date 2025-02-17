@@ -1,5 +1,5 @@
 ﻿#nullable enable
-using SecretStorageCS;
+using iTrooz.FreeDesktopSecrets;
 using System.Diagnostics.Contracts;
 using System.Runtime.Versioning;
 using System.Text;
@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 /// You can store key-values pairs in a secure way using this API.
 /// </summary>
 [SupportedOSPlatform("linux")]
-public class SecretStorage
+public class FreeDesktopSecretsClient
 {
 
     /// <summary>
@@ -47,11 +47,11 @@ public class SecretStorage
     private ObjectPath Session { get; set; }
     private string AppFolder { get; set; } = null!;
 
-    public ILogger Logger {get; set; } = LoggerFactory.Create(builder => builder.AddConsole()).CreateLogger("SecretStorage");
+    public ILogger Logger {get; set; } = LoggerFactory.Create(builder => builder.AddConsole()).CreateLogger("FreeDesktopSecretsClient");
 
-    private SecretStorage(Connection connection)
+    private FreeDesktopSecretsClient(Connection connection)
     {
-        Logger.LogDebug("SecretStorage() instantiated");
+        Logger.LogDebug("FreeDesktopSecretsClient() instantiated");
         if (!OperatingSystem.IsLinux()) 
             throw new PlatformNotSupportedException();
 
@@ -62,22 +62,22 @@ public class SecretStorage
     }
 
     /// <summary>
-    /// Creates a SecretStorage instance using the default session dbus bus
+    /// Creates a FreeDesktopSecretsClient instance using the default session dbus bus
     /// </summary>
     [Pure]
-    public static SecretStorage FromSession()
+    public static FreeDesktopSecretsClient FromSession()
     {
-        return new SecretStorage(new Connection(Address.Session));
+        return new FreeDesktopSecretsClient(new Connection(Address.Session));
     }
 
     /// <summary>
-    /// Creates a SecretStorage instance, and uses the given socket path to connect to the DBus
+    /// Creates a FreeDesktopSecretsClient instance, and uses the given socket path to connect to the DBus
     /// </summary>
     /// <param name="socketPath">path to the socket file managed by a dbus daemon</param>
     [Pure]
-    public static SecretStorage FromSocket(string socketPath)
+    public static FreeDesktopSecretsClient FromSocket(string socketPath)
     {
-        return new SecretStorage(new Connection(socketPath));
+        return new FreeDesktopSecretsClient(new Connection(socketPath));
     }
 
     /// <summary>
