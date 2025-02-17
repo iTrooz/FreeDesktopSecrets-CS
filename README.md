@@ -18,7 +18,10 @@ var itemKeys = await storage.ListItemKeysAsync(); // List keys of all secrets st
 foreach (var item in itemKeys)
     Console.WriteLine(item);
 
-await storage.CreateItemAsync("TestItem", System.Text.Encoding.UTF8.GetBytes("TestString"), true); // Store a secret
+await storage.CreateItemAsync(
+    "TestItem",
+    System.Text.Encoding.UTF8.GetBytes("TestString"),
+    true); // Store a secret
 var secret = await storage.GetItemAsync("TestItem"); // Retrieve it
 Console.WriteLine(System.Text.Encoding.UTF8.GetString(secret!)); // "TestString"
 
