@@ -7,6 +7,14 @@ Client library in C# to use the Freedesktop Secrets API
 The Freedesktop Secrets API is a standard for storing secrets (passwords, keys, etc.) in a secure way on a Linux system. It is implemented over dbus, which is a message bus system that allows communication between applications.
 This library is a C# client to use this API.
 
+# Install
+
+Run
+```bash
+dotnet add package iTrooz.FreeDesktopSecrets
+```
+in your project directory to install the library.
+
 # Usage
 
 Sample usage of this library:
