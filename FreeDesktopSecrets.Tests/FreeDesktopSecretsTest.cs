@@ -13,7 +13,6 @@ public class FreeDesktopSecretsTest
         if (string.IsNullOrEmpty(useRealDbus))
         {
             Console.WriteLine("Using container dbus");
-            Console.WriteLine("Current working directory: " + Directory.GetCurrentDirectory());
             storage = FreeDesktopSecretsClient.FromSocket("tcp:host=localhost,port=7834");
         }
         else
