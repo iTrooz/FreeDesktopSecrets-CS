@@ -1,7 +1,8 @@
 using Tmds.DBus;
 
-namespace iTrooz.FreeDesktopSecrets;
+[assembly: System.Runtime.CompilerServices.InternalsVisibleToAttribute("Tmds.DBus.Emit")]
 
+namespace iTrooz.FreeDesktopSecrets;
 
 [DBusInterface("org.freedesktop.Secret.Service")]
 internal interface IService : IDBusObject
